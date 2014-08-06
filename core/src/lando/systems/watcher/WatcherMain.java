@@ -214,7 +214,7 @@ public class WatcherMain extends ApplicationAdapter {
 	 * Prompt user to pick a new watched directory with a file chooser dialog
 	 */
 	private void updateWatchDirectory() {
-		final JFileChooser fileChooser = new JFileChooser();
+		final JFileChooser fileChooser = new JFileChooser(watchPath.toAbsolutePath().toString());
 		try {
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			EventQueue.invokeAndWait(new Runnable() {
