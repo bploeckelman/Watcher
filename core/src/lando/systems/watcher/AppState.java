@@ -9,10 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,12 +25,9 @@ import java.util.Map;
  */
 public class AppState {
 
-	public static final int viewport_width = 512;
-	public static final int viewport_height = 512;
-
 	// TODO : encapsulate sceneCamera functionality
-	Viewport sceneViewport;
-	Viewport hudViewport;
+	OrthographicCamera sceneCamera;
+	OrthographicCamera hudCamera;
 
 	// TODO : encapsulate watch directory functionality
 	final String default_watch_dir = "C:\\";
@@ -67,8 +60,12 @@ public class AppState {
 	 * Handle a window resize event
 	 */
 	public void resize(int width, int height) {
-		sceneViewport.update(width, height);
-		hudViewport.update(width, height);
+		sceneCamera.setToOrtho(false, width, height);
+		sceneCamera.position.set(width / 2f, height / 2f, 0);
+		sceneCamera.update();
+
+		hudCamera.setToOrtho(false, width, height);
+		hudCamera.update();
 	}
 
 	/**
@@ -107,8 +104,8 @@ public class AppState {
 			keyframe = animation.getKeyFrame(animTimer);
 		}
 
-		sceneViewport.update();
-		hudViewport.update();
+		sceneCamera.update();
+		hudCamera.update();
 	}
 
 	/**
@@ -172,7 +169,7 @@ public class AppState {
 		textures.clear();
 		animation = new Animation(1f, new TextureRegion(default_texture));
 		animation.setPlayMode(Animation.PlayMode.LOOP);
-		((OrthographicCamera) sceneViewport.getCamera()).zoom = 1;
+		sceneCamera.zoom = 1;
 	}
 
 	/**
@@ -225,19 +222,14 @@ public class AppState {
 	 * Initialize the scene sceneCamera and ui sceneCamera
 	 */
 	private void initializeCameras() {
-//		sceneCamera = new OrthographicCamera();
-//		sceneCamera.setToOrtho(false, viewport_width, viewport_height);//Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//		sceneCamera.update();
-//
-//		hudCamera = new OrthographicCamera();
-//		hudCamera.setToOrtho(false, viewport_width, viewport_height);
-//		hudCamera.update();
+		sceneCamera = new OrthographicCamera();
+		sceneCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		sceneCamera.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0);
+		sceneCamera.update();
 
-		sceneViewport = new ScreenViewport();
-		sceneViewport.getCamera().translate(viewport_width / 2f, viewport_height / 2f, 0);
-
-		hudViewport = new ScreenViewport();
-		hudViewport.getCamera().translate(viewport_width / 2f, viewport_height / 2f, 0);
+		hudCamera = new OrthographicCamera();
+		hudCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		hudCamera.update();
 	}
 
 	/**
