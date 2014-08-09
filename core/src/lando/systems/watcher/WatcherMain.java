@@ -1,8 +1,7 @@
 package lando.systems.watcher;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -48,13 +47,53 @@ public class WatcherMain extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 512, 512);
+
+		Gdx.input.setInputProcessor(new InputAdapter() {
+			final float shift_scroll_modifier = 0.5f;
+			final float scroll_modifier = 0.01f;
+			boolean shiftDown = false;
+			@Override
+			public boolean keyDown(int keycode) {
+				if (keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT) {
+					shiftDown = true;
+				} else if (keycode == Keys.TAB) {
+					camera.zoom = 1;
+				}
+				return false;
+			}
+			@Override
+			public boolean keyUp(int keycode) {
+				if (keycode == Keys.ESCAPE) {
+					Gdx.app.exit();
+				}
+				if (keycode == Keys.SPACE) {
+					updateWatchDirectory();
+				}
+				if (keycode == Keys.BACKSPACE) {
+					clearAnimation();
+				}
+				if (keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT) {
+					shiftDown = false;
+				}
+				return false;
+			}
+			@Override
+			public boolean scrolled(int amount) {
+				camera.zoom += amount * (shiftDown ? shift_scroll_modifier : scroll_modifier);
+				return false;
+			}
+		});
+
 		textures = new HashMap<String, Texture>();
 		default_texture = new Texture(Gdx.files.internal("badlogic.jpg"));
 		animation = new Animation(1f, new TextureRegion(default_texture));
 		font = new BitmapFont();
+
 		frame_rate = default_frame_rate;
+
 		registerWatchDirectory(default_watch_dir);
 	}
 
@@ -162,18 +201,6 @@ public class WatcherMain extends ApplicationAdapter {
 	 * @param delta
 	 */
 	public void update(float delta) {
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-			Gdx.app.exit();
-		}
-
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE) ) {
-			updateWatchDirectory();
-		}
-
-		if (Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)) {
-			clearAnimation();
-		}
-
 		// Adjust frame rate in small steps
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			frame_rate += frame_step_small;
