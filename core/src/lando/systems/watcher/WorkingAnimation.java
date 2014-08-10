@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
@@ -23,6 +24,7 @@ import java.util.Map;
 public class WorkingAnimation {
 
 	static final String default_texture_filename = "badlogic.jpg";
+
 	static final float frame_rate_min   = 0.0077f;
 	static final float frame_step_small = 0.00025f;
 	static final float frame_step_big   = 0.0025f;
@@ -34,6 +36,7 @@ public class WorkingAnimation {
 	float animTimer;
 
 	Texture default_texture;
+	Texture highlight_texture;
 	TextureRegion keyframe;
 
 
@@ -79,6 +82,33 @@ public class WorkingAnimation {
 		if (animation.getAnimationDuration() != 0) {
 			keyframe = animation.getKeyFrame(animTimer);
 		}
+	}
+
+	/**
+	 * Render the animation user interface with the specified SpriteBatch
+	 *
+	 * @param batch the SpriteBatch to draw with
+	 */
+	public void renderUI(SpriteBatch batch) {
+		final float initial_pos_x = 5;
+		final float initial_pos_y = 75;
+		final float thumbnail_width = 32;
+		final float thumbnail_height = 32;
+		final float keyframe_offset_height = 0;
+
+		float x = initial_pos_x;
+		float y = initial_pos_y;
+
+		for (TextureRegion kf : animation.getKeyFrames()) {
+			if (keyframe != kf) batch.setColor(0.2f, 0.2f, 0.2f, 0.75f);
+			else                batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+			batch.draw(kf, x, y, thumbnail_width, thumbnail_height);
+			y += thumbnail_height + keyframe_offset_height;
+
+			if (keyframe != kf) batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+
 	}
 
 	/**

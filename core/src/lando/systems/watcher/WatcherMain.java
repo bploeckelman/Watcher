@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 public class WatcherMain extends ApplicationAdapter {
@@ -70,6 +71,8 @@ public class WatcherMain extends ApplicationAdapter {
 		font.draw(batch, "[space] change directory", 5, 45 + font.getLineHeight());
 		font.draw(batch, "[backspace] clear current animation", 5, 25 + font.getLineHeight());
 		font.draw(batch, "[left/right] [up/down] change frame duration", 5, 5 + font.getLineHeight());
+
+		appState.workingAnimation.renderUI(batch);
 
 		batch.end();
 	}
