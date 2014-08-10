@@ -31,6 +31,9 @@ public class WorkingAnimation {
 	static final float frame_step_big   = 0.0025f;
 	static final float default_frame_rate = 0.15f;
 
+	float thumbnail_width = 32;
+	float thumbnail_height = 32;
+
 	static Map<String, Texture> textures;
 	static Animation animation;
 	static float framerate;
@@ -92,8 +95,6 @@ public class WorkingAnimation {
 	public void renderUI(SpriteBatch batch) {
 		final float initial_pos_x = 5;
 		final float initial_pos_y = 75;
-		final float thumbnail_width = 32;
-		final float thumbnail_height = 32;
 		final float keyframe_offset_height = 0;
 		final float filename_text_offset_width = 10;
 		final float window_height_offset = 75;
