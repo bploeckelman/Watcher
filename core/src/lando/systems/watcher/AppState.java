@@ -2,12 +2,7 @@ package lando.systems.watcher;
 
 import com.badlogic.gdx.Gdx;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Brian Ploeckelman created on 8/9/2014.
@@ -15,23 +10,16 @@ import java.nio.file.Paths;
 public class AppState {
 
 	Cameras cameras;
-
-	// TODO : encapsulate watch directory functionality
-	final String default_watch_dir = "C:\\";
-	static final String chosenDir = "";
-	static Path watchPath;
-	WatchDir watchDir;
-
+	WorkingDirectory workingDirectory;
 	WorkingAnimation workingAnimation;
 
 
 	public AppState() {
 		cameras = new Cameras();
 		workingAnimation = new WorkingAnimation();
-		initializeWatchDirectory(default_watch_dir);
+		workingDirectory = new WorkingDirectory();
 	}
 
-	// Public Interface -------------------------------------------------------
 
 	/**
 	 * Handle a window resize event
@@ -49,27 +37,10 @@ public class AppState {
 	}
 
 	/**
-	 * Prompt user to pick a new watched directory with a file chooser dialog
+	 * Delegate update working directory request
 	 */
 	public void updateWatchDirectory() {
-		final JFileChooser fileChooser = new JFileChooser(watchPath.toAbsolutePath().toString());
-		try {
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			EventQueue.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					fileChooser.showOpenDialog(null);
-				}
-			});
-		} catch(Exception e) {
-			Gdx.app.log("FILE CHOOSER", "File chooser error: " + e.getMessage());
-		}
-
-		final File chosenFile = fileChooser.getSelectedFile();
-		if (chosenFile != null) {
-			Gdx.app.log("FILE CHOOSER", "Directory: " + chosenFile.getAbsolutePath());
-			initializeWatchDirectory(chosenFile.getAbsolutePath());
-		}
+		workingDirectory.updateWatchDirectory();
 	}
 
 	/**
@@ -93,29 +64,6 @@ public class AppState {
 	public void clearAnimation() {
 		workingAnimation.clear();
 		cameras.sceneCamera.zoom = 1;
-	}
-
-
-	// Private Implementation -------------------------------------------------
-
-
-	/**
-	 * Register the specified path as the current watched directory
-	 *
-	 * @param path the filesystem path to start watching
-	 */
-	private void initializeWatchDirectory(String path) {
-		// register directory and process its events
-		try {
-			watchPath = Paths.get(path);
-
-			workingAnimation.refresh();
-
-			watchDir = new WatchDir(watchPath, false);
-			watchDir.processEvents();
-		} catch (IOException e) {
-			Gdx.app.log("EXCEPTION", e.getMessage());
-		}
 	}
 
 }

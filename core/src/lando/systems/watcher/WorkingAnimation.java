@@ -93,11 +93,11 @@ public class WorkingAnimation {
 	/**
 	 * Refresh animation frames based on current watch path
 	 */
-	public void refresh() {
+	public static void refresh() {
 		// Scan directory for pngs
-		File watchPathFile = AppState.watchPath.toFile();
+		File watchPathFile = WorkingDirectory.watchPath.toFile();
 		if (watchPathFile != null) {
-			File[] files = AppState.watchPath.toFile().listFiles();
+			File[] files = WorkingDirectory.watchPath.toFile().listFiles();
 			if (files == null) return;
 
 			// Update filename->texture map from the current watch path
