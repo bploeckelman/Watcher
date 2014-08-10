@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Brian Ploeckelman created on 8/9/2014.
@@ -36,7 +37,6 @@ public class WorkingAnimation {
 	float animTimer;
 
 	Texture default_texture;
-	Texture highlight_texture;
 	TextureRegion keyframe;
 
 
@@ -95,20 +95,44 @@ public class WorkingAnimation {
 		final float thumbnail_width = 32;
 		final float thumbnail_height = 32;
 		final float keyframe_offset_height = 0;
+		final float filename_text_offset_width = 10;
+
+		final Set<Map.Entry<String, Texture>> entrySet = textures.entrySet();
 
 		float x = initial_pos_x;
 		float y = initial_pos_y;
 
 		for (TextureRegion kf : animation.getKeyFrames()) {
-			if (keyframe != kf) batch.setColor(0.2f, 0.2f, 0.2f, 0.75f);
-			else                batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			if (keyframe != kf) {
+				batch.setColor(0.2f, 0.2f, 0.2f, 0.75f);
+				AppState.font.setColor(0.2f, 0.2f, 0.2f, 0.75f);
+			} else {
+				batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+				AppState.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			}
 
 			batch.draw(kf, x, y, thumbnail_width, thumbnail_height);
+
+			String keyframeFilename = "";
+			for (Map.Entry<String, Texture> entry : entrySet) {
+				if (entry.getValue() == kf.getTexture()) {
+					keyframeFilename = entry.getKey().replace(".png", "");
+					break;
+				}
+			}
+
+			AppState.font.draw(batch, keyframeFilename,
+					x + thumbnail_width + filename_text_offset_width,
+					y + (thumbnail_height / 2f) + (AppState.font.getLineHeight() / 4f)
+			);
+
 			y += thumbnail_height + keyframe_offset_height;
 
-			if (keyframe != kf) batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			if (keyframe != kf) {
+				batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+				AppState.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			}
 		}
-
 	}
 
 	/**
