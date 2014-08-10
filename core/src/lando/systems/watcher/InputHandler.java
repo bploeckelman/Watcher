@@ -10,6 +10,7 @@ import com.badlogic.gdx.Input.Keys;
 public class InputHandler extends InputAdapter {
 	static final float shift_scroll_modifier = 0.1f;
 	static final float scroll_modifier = 0.01f;
+	static final float minimum_zoom = 0.015f;
 
 	AppState appState;
 	boolean shiftDown;
@@ -49,8 +50,8 @@ public class InputHandler extends InputAdapter {
 	@Override
 	public boolean scrolled(int amount) {
 		appState.cameras.sceneCamera.zoom += amount * (shiftDown ? shift_scroll_modifier : scroll_modifier);
-		if (appState.cameras.sceneCamera.zoom < 0.01f) {
-			appState.cameras.sceneCamera.zoom = 0.01f;
+		if (appState.cameras.sceneCamera.zoom < minimum_zoom) {
+			appState.cameras.sceneCamera.zoom = minimum_zoom;
 		}
 		return false;
 	}
