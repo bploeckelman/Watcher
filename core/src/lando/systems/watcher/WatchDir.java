@@ -146,7 +146,7 @@ public class WatchDir {
 							Gdx.app.postRunnable(new Runnable() {
 								@Override
 								public void run() {
-									AppState.handleModifyEvent(name, child);
+									WorkingAnimation.modify(name, child);
 								}
 							});
 						}

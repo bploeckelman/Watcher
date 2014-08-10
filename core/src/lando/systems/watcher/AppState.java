@@ -44,21 +44,6 @@ public class AppState {
 	}
 
 	/**
-	 * Handle an EVENT_MODIFY event from the file system
-	 *
-	 * @param name the name of the modified file
-	 * @param path the path of the modified file
-	 */
-	public static void handleModifyEvent(Path name, Path path) {
-		if (!name.toString().endsWith(".png")) {
-			return;
-		}
-		Gdx.app.log("MODIFY EVENT", "received modify event for " + path.toString());
-
-		WorkingAnimation.modify(name, path);
-	}
-
-	/**
 	 * Clear the current animation frames, reverting to the default animation
 	 */
 	public void clearAnimation() {

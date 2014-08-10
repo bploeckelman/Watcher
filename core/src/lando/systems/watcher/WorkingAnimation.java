@@ -139,6 +139,11 @@ public class WorkingAnimation {
 	 * @param filepath the path of the modified file
 	 */
 	public static void modify(Path filename, Path filepath) {
+		if (!filename.toString().endsWith(".png")) {
+			return;
+		}
+		Gdx.app.log("MODIFY EVENT", "received modify event for " + filepath.toString());
+
 		try {
 			FileHandle fileHandle = Gdx.files.absolute(filepath.toString());
 			textures.put(filename.toString(), new Texture(fileHandle));
