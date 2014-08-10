@@ -45,22 +45,22 @@ public class WatcherMain extends ApplicationAdapter {
 		float thw = appState.workingAnimation.keyframe.getRegionWidth() / 2f;
 		float thh = appState.workingAnimation.keyframe.getRegionHeight() / 2f;
 
-		int vw = (int) appState.sceneCamera.viewportWidth;
-		int vh = (int) appState.sceneCamera.viewportHeight;
+		int vw = (int) appState.cameras.sceneCamera.viewportWidth;
+		int vh = (int) appState.cameras.sceneCamera.viewportHeight;
 		Gdx.gl20.glViewport(0, 0, vw, vh);
 
-		batch.setProjectionMatrix(appState.sceneCamera.combined);
+		batch.setProjectionMatrix(appState.cameras.sceneCamera.combined);
 		batch.begin();
 		batch.draw(appState.workingAnimation.keyframe, whw - thw, whh - thh);
 		batch.end();
 	}
 
 	private void uiRender() {
-		int vw = (int) appState.hudCamera.viewportWidth;
-		int vh = (int) appState.hudCamera.viewportHeight;
+		int vw = (int) appState.cameras.hudCamera.viewportWidth;
+		int vh = (int) appState.cameras.hudCamera.viewportHeight;
 		Gdx.gl20.glViewport(0, 0, vw, vh);
 
-		batch.setProjectionMatrix(appState.hudCamera.combined);
+		batch.setProjectionMatrix(appState.cameras.hudCamera.combined);
 		batch.begin();
 
 		font.setColor(Color.WHITE);

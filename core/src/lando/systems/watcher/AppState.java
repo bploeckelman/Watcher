@@ -1,7 +1,6 @@
 package lando.systems.watcher;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +14,7 @@ import java.nio.file.Paths;
  */
 public class AppState {
 
-	// TODO : encapsulate sceneCamera functionality
-	OrthographicCamera sceneCamera;
-	OrthographicCamera hudCamera;
+	Cameras cameras;
 
 	// TODO : encapsulate watch directory functionality
 	final String default_watch_dir = "C:\\";
@@ -29,7 +26,7 @@ public class AppState {
 
 
 	public AppState() {
-		initializeCameras();
+		cameras = new Cameras();
 		workingAnimation = new WorkingAnimation();
 		initializeWatchDirectory(default_watch_dir);
 	}
@@ -40,12 +37,7 @@ public class AppState {
 	 * Handle a window resize event
 	 */
 	public void resize(int width, int height) {
-		sceneCamera.setToOrtho(false, width, height);
-		sceneCamera.position.set(width / 2f, height / 2f, 0);
-		sceneCamera.update();
-
-		hudCamera.setToOrtho(false, width, height);
-		hudCamera.update();
+		cameras.resize(width, height);
 	}
 
 	/**
@@ -53,8 +45,7 @@ public class AppState {
 	 */
 	public void update(float delta) {
 		workingAnimation.update(delta);
-		sceneCamera.update();
-		hudCamera.update();
+		cameras.update(delta);
 	}
 
 	/**
@@ -101,26 +92,12 @@ public class AppState {
 	 */
 	public void clearAnimation() {
 		workingAnimation.clear();
-		sceneCamera.zoom = 1;
+		cameras.sceneCamera.zoom = 1;
 	}
 
 
 	// Private Implementation -------------------------------------------------
 
-
-	/**
-	 * Initialize the scene sceneCamera and ui sceneCamera
-	 */
-	private void initializeCameras() {
-		sceneCamera = new OrthographicCamera();
-		sceneCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		sceneCamera.position.set(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0);
-		sceneCamera.update();
-
-		hudCamera = new OrthographicCamera();
-		hudCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		hudCamera.update();
-	}
 
 	/**
 	 * Register the specified path as the current watched directory

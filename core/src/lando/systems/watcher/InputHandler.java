@@ -24,7 +24,7 @@ public class InputHandler extends InputAdapter {
 		if (keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT) {
 			shiftDown = true;
 		} else if (keycode == Keys.TAB) {
-			appState.sceneCamera.zoom = 1;
+			appState.cameras.sceneCamera.zoom = 1;
 		}
 		return false;
 	}
@@ -48,9 +48,9 @@ public class InputHandler extends InputAdapter {
 
 	@Override
 	public boolean scrolled(int amount) {
-		appState.sceneCamera.zoom += amount * (shiftDown ? shift_scroll_modifier : scroll_modifier);
-		if (appState.sceneCamera.zoom < 0.01f) {
-			appState.sceneCamera.zoom = 0.01f;
+		appState.cameras.sceneCamera.zoom += amount * (shiftDown ? shift_scroll_modifier : scroll_modifier);
+		if (appState.cameras.sceneCamera.zoom < 0.01f) {
+			appState.cameras.sceneCamera.zoom = 0.01f;
 		}
 		return false;
 	}
