@@ -42,8 +42,8 @@ public class WatcherMain extends ApplicationAdapter {
 	private void sceneRender() {
 		float whw = Gdx.graphics.getWidth() / 2f;
 		float whh = Gdx.graphics.getHeight() / 2f;
-		float thw = appState.keyframe.getRegionWidth() / 2f;
-		float thh = appState.keyframe.getRegionHeight() / 2f;
+		float thw = appState.workingAnimation.keyframe.getRegionWidth() / 2f;
+		float thh = appState.workingAnimation.keyframe.getRegionHeight() / 2f;
 
 		int vw = (int) appState.sceneCamera.viewportWidth;
 		int vh = (int) appState.sceneCamera.viewportHeight;
@@ -51,7 +51,7 @@ public class WatcherMain extends ApplicationAdapter {
 
 		batch.setProjectionMatrix(appState.sceneCamera.combined);
 		batch.begin();
-		batch.draw(appState.keyframe, whw - thw, whh - thh);
+		batch.draw(appState.workingAnimation.keyframe, whw - thw, whh - thh);
 		batch.end();
 	}
 
@@ -65,8 +65,8 @@ public class WatcherMain extends ApplicationAdapter {
 
 		font.setColor(Color.WHITE);
 		font.draw(batch, "working directory: " + AppState.watchPath.toString(), 5, Gdx.graphics.getHeight() - 5);
-		font.draw(batch, "anim  duration: " + String.format("%02.4f sec", AppState.animation.getAnimationDuration()), 5, Gdx.graphics.getHeight() - 25);
-		font.draw(batch, "frame duration: " + String.format("%02.4f sec", AppState.framerate), 5, Gdx.graphics.getHeight() - 45);
+		font.draw(batch, "anim  duration: " + String.format("%02.4f sec", WorkingAnimation.animation.getAnimationDuration()), 5, Gdx.graphics.getHeight() - 25);
+		font.draw(batch, "frame duration: " + String.format("%02.4f sec", WorkingAnimation.framerate), 5, Gdx.graphics.getHeight() - 45);
 
 		font.draw(batch, "[space] change directory", 5, 45 + font.getLineHeight());
 		font.draw(batch, "[backspace] clear current animation", 5, 25 + font.getLineHeight());
