@@ -26,7 +26,7 @@ public class WorkingAnimation {
 
 	static final String default_texture_filename = "badlogic.jpg";
 
-	static final float frame_rate_min   = 0.0077f;
+	static final float frame_rate_min   = 0.015f;
 	static final float frame_step_small = 0.00025f;
 	static final float frame_step_big   = 0.0025f;
 	static final float default_frame_rate = 0.15f;
