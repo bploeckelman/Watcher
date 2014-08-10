@@ -96,13 +96,25 @@ public class WorkingAnimation {
 		final float thumbnail_height = 32;
 		final float keyframe_offset_height = 0;
 		final float filename_text_offset_width = 10;
+		final float window_height_offset = 60;
 
 		final Set<Map.Entry<String, Texture>> entrySet = textures.entrySet();
 
 		float x = initial_pos_x;
 		float y = initial_pos_y;
 
+		// TODO : draw the subset of frames that fits in the container while showing the current keyframe
+		float ww = Gdx.graphics.getWidth();
+		float wh = Gdx.graphics.getHeight();
+		float thumbnails_container_height = (wh - window_height_offset) - initial_pos_y;
+		int max_thumbnails_in_container = (int) (thumbnails_container_height / thumbnail_height);
+		int num_thumbnails_in_container = 0;
+
 		for (TextureRegion kf : animation.getKeyFrames()) {
+			if (++num_thumbnails_in_container > max_thumbnails_in_container) {
+				break;
+			}
+
 			if (keyframe != kf) {
 				batch.setColor(0.2f, 0.2f, 0.2f, 0.75f);
 				AppState.font.setColor(0.2f, 0.2f, 0.2f, 0.75f);
