@@ -96,25 +96,29 @@ public class WorkingAnimation {
 		final float thumbnail_height = 32;
 		final float keyframe_offset_height = 0;
 		final float filename_text_offset_width = 10;
-		final float window_height_offset = 60;
+		final float window_height_offset = 75;
 
 		final Set<Map.Entry<String, Texture>> entrySet = textures.entrySet();
 
 		float x = initial_pos_x;
 		float y = initial_pos_y;
 
-		// TODO : draw the subset of frames that fits in the container while showing the current keyframe
-		float ww = Gdx.graphics.getWidth();
-		float wh = Gdx.graphics.getHeight();
-		float thumbnails_container_height = (wh - window_height_offset) - initial_pos_y;
-		int max_thumbnails_in_container = (int) (thumbnails_container_height / thumbnail_height);
+		// Determine how many thumbnails fit on screen and which keyframe
+		// should be drawn first so that the current keyframe always shows
+		float window_height = Gdx.graphics.getHeight();
+		float thumbnails_container_height = window_height - window_height_offset - initial_pos_y;
 		int num_thumbnails_in_container = 0;
+		int max_thumbnails_in_container = (int) (thumbnails_container_height / thumbnail_height);
+		int starting_index = 0;
+		int keyframe_index = animation.getKeyFrameIndex(animTimer);
+		if (keyframe_index > max_thumbnails_in_container) {
+			starting_index = keyframe_index - max_thumbnails_in_container;
+		}
 
-		for (TextureRegion kf : animation.getKeyFrames()) {
-			if (++num_thumbnails_in_container > max_thumbnails_in_container) {
-				break;
-			}
+		for (int i = starting_index; i < animation.getKeyFrames().length; ++i) {
+			TextureRegion kf = animation.getKeyFrames()[i];
 
+			// Highlight the current keyframe thumbnail, darken the rest
 			if (keyframe != kf) {
 				batch.setColor(0.2f, 0.2f, 0.2f, 0.75f);
 				AppState.font.setColor(0.2f, 0.2f, 0.2f, 0.75f);
@@ -122,9 +126,9 @@ public class WorkingAnimation {
 				batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 				AppState.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
-
 			batch.draw(kf, x, y, thumbnail_width, thumbnail_height);
 
+			// Find this keyframe's filename and draw it next to the thumbnail
 			String keyframeFilename = "";
 			for (Map.Entry<String, Texture> entry : entrySet) {
 				if (entry.getValue() == kf.getTexture()) {
@@ -132,17 +136,23 @@ public class WorkingAnimation {
 					break;
 				}
 			}
-
 			AppState.font.draw(batch, keyframeFilename,
 					x + thumbnail_width + filename_text_offset_width,
 					y + (thumbnail_height / 2f) + (AppState.font.getLineHeight() / 4f)
 			);
 
+			// Next row
 			y += thumbnail_height + keyframe_offset_height;
 
+			// Reset the color if necessary
 			if (keyframe != kf) {
 				batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 				AppState.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			}
+
+			// Don't draw more than will fit on screen
+			if (++num_thumbnails_in_container > max_thumbnails_in_container) {
+				break;
 			}
 		}
 	}
