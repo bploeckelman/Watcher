@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public class WorkingAnimation {
 
-	static final String default_texture_filename = "badlogic.jpg";
+	static final String default_texture_filename = "eye.png";
 
 	static final float frame_rate_min   = 0.015f;
 	static final float frame_step_small = 0.00025f;
@@ -226,6 +226,7 @@ public class WorkingAnimation {
 
 		if (default_texture == null) {
 			default_texture = new Texture(Gdx.files.internal(default_texture_filename));
+			default_texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		}
 
 		animation = new Animation(1, new TextureRegion(default_texture));

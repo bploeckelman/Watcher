@@ -14,9 +14,8 @@ import java.nio.file.Paths;
  */
 public class WorkingDirectory {
 
-	static final String default_watch_dir = "C:\\";
+	static final String default_watch_dir = "watcher";
 
-	static final String chosenDir = "";
 	static Path watchPath;
 
 	WatchDir watchDir;
