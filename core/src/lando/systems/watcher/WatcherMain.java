@@ -12,15 +12,14 @@ public class WatcherMain extends ApplicationAdapter {
 	BitmapFont font;
 	SpriteBatch batch;
 	AppState appState;
-	InputHandler inputHandler;
 
 	@Override
 	public void create () {
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 		appState = new AppState();
-		inputHandler = new InputHandler(appState);
-		Gdx.input.setInputProcessor(inputHandler);
+
+		Gdx.input.setInputProcessor(new InputHandler(appState));
 	}
 
 	@Override
