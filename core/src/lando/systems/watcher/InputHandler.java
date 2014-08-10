@@ -8,7 +8,7 @@ import com.badlogic.gdx.Input.Keys;
  * Brian Ploeckelman created on 8/9/2014.
  */
 public class InputHandler extends InputAdapter {
-	static final float shift_scroll_modifier = 0.5f;
+	static final float shift_scroll_modifier = 0.1f;
 	static final float scroll_modifier = 0.01f;
 
 	AppState appState;
