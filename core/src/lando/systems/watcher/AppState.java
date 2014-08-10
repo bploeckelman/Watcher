@@ -1,6 +1,7 @@
 package lando.systems.watcher;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import java.nio.file.Path;
 
@@ -8,6 +9,8 @@ import java.nio.file.Path;
  * Brian Ploeckelman created on 8/9/2014.
  */
 public class AppState {
+
+	static BitmapFont font = new BitmapFont();
 
 	Cameras cameras;
 	WorkingDirectory workingDirectory;

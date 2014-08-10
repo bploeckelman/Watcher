@@ -3,20 +3,16 @@ package lando.systems.watcher;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 public class WatcherMain extends ApplicationAdapter {
 
-	BitmapFont font;
 	SpriteBatch batch;
 	AppState appState;
 
 	@Override
 	public void create () {
-		font = new BitmapFont();
 		batch = new SpriteBatch();
 		appState = new AppState();
 
@@ -63,14 +59,14 @@ public class WatcherMain extends ApplicationAdapter {
 		batch.setProjectionMatrix(appState.cameras.hudCamera.combined);
 		batch.begin();
 
-		font.setColor(Color.WHITE);
-		font.draw(batch, "working directory: " + WorkingDirectory.watchPath.toString(), 5, Gdx.graphics.getHeight() - 5);
-		font.draw(batch, "anim  duration: " + String.format("%02.4f sec", WorkingAnimation.animation.getAnimationDuration()), 5, Gdx.graphics.getHeight() - 25);
-		font.draw(batch, "frame duration: " + String.format("%02.4f sec", WorkingAnimation.framerate), 5, Gdx.graphics.getHeight() - 45);
+		AppState.font.setColor(Color.WHITE);
+		AppState.font.draw(batch, "working directory: " + WorkingDirectory.watchPath.toString(), 5, Gdx.graphics.getHeight() - 5);
+		AppState.font.draw(batch, "anim  duration: " + String.format("%02.4f sec", WorkingAnimation.animation.getAnimationDuration()), 5, Gdx.graphics.getHeight() - 25);
+		AppState.font.draw(batch, "frame duration: " + String.format("%02.4f sec", WorkingAnimation.framerate), 5, Gdx.graphics.getHeight() - 45);
 
-		font.draw(batch, "[space] change directory", 5, 45 + font.getLineHeight());
-		font.draw(batch, "[backspace] clear current animation", 5, 25 + font.getLineHeight());
-		font.draw(batch, "[left/right] [up/down] change frame duration", 5, 5 + font.getLineHeight());
+		AppState.font.draw(batch, "[space] change directory", 5, 45 + AppState.font.getLineHeight());
+		AppState.font.draw(batch, "[backspace] clear current animation", 5, 25 + AppState.font.getLineHeight());
+		AppState.font.draw(batch, "[left/right] [up/down] change frame duration", 5, 5 + AppState.font.getLineHeight());
 
 		appState.workingAnimation.renderUI(batch);
 
