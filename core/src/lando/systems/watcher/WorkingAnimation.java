@@ -94,10 +94,10 @@ public class WorkingAnimation {
 	 */
 	public void renderUI(SpriteBatch batch) {
 		final float initial_pos_x = 5;
-		final float initial_pos_y = 75;
+		final float initial_pos_y = 35;
 		final float keyframe_offset_height = 0;
 		final float filename_text_offset_width = 10;
-		final float window_height_offset = 75;
+		final float window_height_offset = 100;
 
 		final Set<Map.Entry<String, Texture>> entrySet = textures.entrySet();
 

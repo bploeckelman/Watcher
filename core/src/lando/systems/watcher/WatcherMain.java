@@ -72,10 +72,6 @@ public class WatcherMain extends ApplicationAdapter {
 		batch.begin();
 
 		AppState.font.setColor(Color.WHITE);
-//		AppState.font.draw(batch, "working directory: " + WorkingDirectory.watchPath.toString(), margin_x, Gdx.graphics.getHeight() - 5);
-		AppState.font.draw(batch, "anim  duration: " + String.format("%02.4f sec", WorkingAnimation.animation.getAnimationDuration()), margin_x, Gdx.graphics.getHeight() - 25);
-		AppState.font.draw(batch, "frame duration: " + String.format("%02.4f sec", WorkingAnimation.framerate), margin_x, Gdx.graphics.getHeight() - 45);
-
 		AppState.font.draw(batch, "[mouse scroll] zoom animation in/out", 2 * (margin_x + 72), 45 + line_height);
 		AppState.font.draw(batch, "[shift+scroll] zoom faster  [ctrl+scroll] zoom thumbnails", 2 * (margin_x + 72), 25 + line_height);
 		AppState.font.draw(batch, "[left/right] [up/down] change frame duration", 2 * (margin_x + 72), 5 + line_height);

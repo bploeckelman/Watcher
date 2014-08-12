@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
@@ -23,6 +24,8 @@ public class UserInterface {
 
 	Window statusWindow;
 	Label watchDirLbl;
+	Label animDurationLbl;
+	Label frameDurationLbl;
 
 
 	public UserInterface(AppState state) {
@@ -36,6 +39,10 @@ public class UserInterface {
 	public void update(float delta) {
 		stage.act(delta);
 		watchDirLbl.setText(WorkingDirectory.watchPath.getFileName().toAbsolutePath().toString());
+		animDurationLbl.setText("Animation duration (sec) : "
+				+ String.format("%02.4f", WorkingAnimation.animation.getAnimationDuration()));
+		frameDurationLbl.setText("Frame duration     (sec) : "
+				+ String.format("%02.4f", WorkingAnimation.framerate));
 	}
 
 	public void render() {
@@ -45,7 +52,7 @@ public class UserInterface {
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
 		quitBtn.setPosition(stage.getWidth() - 72 - 5, 5);
-		statusWindow.setSize(stage.getWidth(), 50);
+		statusWindow.setSize(stage.getWidth(), statusWindow.getHeight());
 		statusWindow.setPosition(0, stage.getHeight());
 	}
 
@@ -106,13 +113,18 @@ public class UserInterface {
 		// Status window
 		// --------------------------------------------------------------------
 		watchDirLbl = new Label(WorkingDirectory.default_watch_dir, skin);
+		animDurationLbl = new Label("Animation duration (sec) : 0.0000", skin);
+		frameDurationLbl = new Label("Frame duration     (sec) : 0.0000", skin);
 
 		statusWindow = new Window("Status", skin);
-		statusWindow.row();
-		statusWindow.add(watchDirLbl).width(stage.getWidth());
+		statusWindow.row(); statusWindow.add(watchDirLbl)     .width(stage.getWidth()).align(Align.left);
+		statusWindow.row(); statusWindow.add(animDurationLbl) .width(stage.getWidth()).align(Align.left);
+		statusWindow.row(); statusWindow.add(frameDurationLbl).width(stage.getWidth()).align(Align.left);
 		statusWindow.pack();
-		statusWindow.setSize(stage.getWidth(), 40);
 		statusWindow.setPosition(0, stage.getHeight());
+		statusWindow.setTitleAlignment(Align.left);
+		statusWindow.padLeft(5);
+		statusWindow.left();
 		// --------------------------------------------------------------------
 
 		// Add to stage
