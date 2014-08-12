@@ -2,8 +2,10 @@ package lando.systems.watcher;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
@@ -19,6 +21,9 @@ public class UserInterface {
 	TextButton clearAnimBtn;
 	TextButton quitBtn;
 
+	Window statusWindow;
+	Label watchDirLbl;
+
 
 	public UserInterface(AppState state) {
 		appState = state;
@@ -30,6 +35,7 @@ public class UserInterface {
 
 	public void update(float delta) {
 		stage.act(delta);
+		watchDirLbl.setText(WorkingDirectory.watchPath.getFileName().toAbsolutePath().toString());
 	}
 
 	public void render() {
@@ -39,6 +45,8 @@ public class UserInterface {
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
 		quitBtn.setPosition(stage.getWidth() - 72 - 5, 5);
+		statusWindow.setSize(stage.getWidth(), 50);
+		statusWindow.setPosition(0, stage.getHeight());
 	}
 
 	public void dispose() {
@@ -47,6 +55,8 @@ public class UserInterface {
 
 
 	private void initializeWidgets() {
+		// Buttons
+		// --------------------------------------------------------------------
 		loadAnimBtn = new TextButton("Load", skin);
 		loadAnimBtn.addListener(new InputListener() {
 			@Override
@@ -91,10 +101,27 @@ public class UserInterface {
 		});
 		quitBtn.setPosition(stage.getWidth() - 72 - 5, 5);
 		quitBtn.setSize(72, 32);
+		// --------------------------------------------------------------------
 
+		// Status window
+		// --------------------------------------------------------------------
+		watchDirLbl = new Label(WorkingDirectory.default_watch_dir, skin);
+
+		statusWindow = new Window("Status", skin);
+		statusWindow.row();
+		statusWindow.add(watchDirLbl).width(stage.getWidth());
+		statusWindow.pack();
+		statusWindow.setSize(stage.getWidth(), 40);
+		statusWindow.setPosition(0, stage.getHeight());
+		// --------------------------------------------------------------------
+
+		// Add to stage
+		// --------------------------------------------------------------------
 		stage.addActor(loadAnimBtn);
 		stage.addActor(clearAnimBtn);
 		stage.addActor(quitBtn);
+		stage.addActor(statusWindow);
+		// --------------------------------------------------------------------
 	}
 
 }

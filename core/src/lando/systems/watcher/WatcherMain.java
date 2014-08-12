@@ -72,7 +72,7 @@ public class WatcherMain extends ApplicationAdapter {
 		batch.begin();
 
 		AppState.font.setColor(Color.WHITE);
-		AppState.font.draw(batch, "working directory: " + WorkingDirectory.watchPath.toString(), margin_x, Gdx.graphics.getHeight() - 5);
+//		AppState.font.draw(batch, "working directory: " + WorkingDirectory.watchPath.toString(), margin_x, Gdx.graphics.getHeight() - 5);
 		AppState.font.draw(batch, "anim  duration: " + String.format("%02.4f sec", WorkingAnimation.animation.getAnimationDuration()), margin_x, Gdx.graphics.getHeight() - 25);
 		AppState.font.draw(batch, "frame duration: " + String.format("%02.4f sec", WorkingAnimation.framerate), margin_x, Gdx.graphics.getHeight() - 45);
 
