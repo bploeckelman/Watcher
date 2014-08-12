@@ -40,12 +40,6 @@ public class InputHandler extends InputAdapter {
 		if (keycode == Keys.ESCAPE) {
 			Gdx.app.exit();
 		}
-		if (keycode == Keys.SPACE) {
-			appState.updateWatchDirectory();
-		}
-		if (keycode == Keys.BACKSPACE) {
-			appState.clearAnimation();
-		}
 		if (keycode == Keys.SHIFT_LEFT || keycode == Keys.SHIFT_RIGHT) {
 			shiftDown = false;
 		}
