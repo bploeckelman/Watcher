@@ -17,18 +17,14 @@ public class UserInterface {
 
 	TextButton loadAnimBtn;
 	TextButton clearAnimBtn;
+	TextButton quitBtn;
 
 
 	public UserInterface(AppState state) {
 		appState = state;
-
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-
-		initializeWidgets();
-
 		stage = new Stage(new ScreenViewport());
-		stage.addActor(loadAnimBtn);
-		stage.addActor(clearAnimBtn);
+		initializeWidgets();
 	}
 
 
@@ -42,6 +38,7 @@ public class UserInterface {
 
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		quitBtn.setPosition(stage.getWidth() - 72 - 5, 5);
 	}
 
 	public void dispose() {
@@ -79,6 +76,25 @@ public class UserInterface {
 		});
 		clearAnimBtn.setPosition(5 + 72 + 5, 5);
 		clearAnimBtn.setSize(72, 32);
+
+		quitBtn = new TextButton("Quit", skin);
+		quitBtn.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				Gdx.app.exit();
+			}
+		});
+		quitBtn.setPosition(stage.getWidth() - 72 - 5, 5);
+		quitBtn.setSize(72, 32);
+
+		stage.addActor(loadAnimBtn);
+		stage.addActor(clearAnimBtn);
+		stage.addActor(quitBtn);
 	}
 
 }
