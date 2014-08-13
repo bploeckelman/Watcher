@@ -41,6 +41,7 @@ public class WorkingAnimation {
 
 	Texture default_texture;
 	TextureRegion keyframe;
+	boolean paused;
 
 
 	public WorkingAnimation() {
@@ -77,8 +78,10 @@ public class WorkingAnimation {
 		}
 
 		// Update animation timer
-		if ((animTimer += delta) > animation.getAnimationDuration()) {
-			animTimer = 0f;
+		if (!paused) {
+			if ((animTimer += delta) > animation.getAnimationDuration()) {
+				animTimer = 0f;
+			}
 		}
 
 		// Get current keyframe (assuming a valid animation)
@@ -259,6 +262,7 @@ public class WorkingAnimation {
 
 		framerate = default_frame_rate;
 		animTimer = 0;
+		paused = false;
 	}
 
 }

@@ -23,7 +23,7 @@ public class UserInterface {
 	TextButton quitBtn;
 
 	ImageButton playBtn;
-	ImageButton pauseBtn;
+	ImageButton playPauseBtn;
 	ImageButton nextFrameBtn;
 	ImageButton prevFrameBtn;
 
@@ -137,11 +137,13 @@ public class UserInterface {
 		quitBtn.setSize(72, 32);
 
 		float left = 5 + 72 + 5 + 72;
-		playBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(playUp)), new TextureRegionDrawable(new TextureRegion(playDown)));
-		playBtn.setPosition(left + 5 + 32 + 5, 5);
-		playBtn.setColor(1,1,1,0);
-		playBtn.setDisabled(true);
-		playBtn.addListener(new InputListener() {
+		playPauseBtn = new ImageButton(
+				new TextureRegionDrawable(new TextureRegion(pauseUp)),
+				new TextureRegionDrawable(new TextureRegion(pauseDown)),
+				new TextureRegionDrawable(new TextureRegion(playDown)));
+		playPauseBtn.setPosition(left + 5 + 32 + 5, 5);
+		playPauseBtn.setChecked(true);
+		playPauseBtn.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -149,31 +151,10 @@ public class UserInterface {
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				playBtn.setColor(1,1,1,0);
-				pauseBtn.setColor(1,1,1,1);
-
-				playBtn.setDisabled(true);
-				pauseBtn.setDisabled(false);
+				appState.workingAnimation.paused = !playPauseBtn.isChecked();
 			}
 		});
-		pauseBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(pauseUp)), new TextureRegionDrawable(new TextureRegion(pauseDown)));
-		pauseBtn.setPosition(left + 5 + 32 + 5, 5);
-		pauseBtn.setDisabled(false);
-		pauseBtn.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
 
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				playBtn.setColor(1,1,1,1);
-				pauseBtn.setColor(1,1,1,0);
-
-				playBtn.setDisabled(false);
-				pauseBtn.setDisabled(true);
-			}
-		});
 		nextFrameBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextFrameUp)), new TextureRegionDrawable(new TextureRegion(nextFrameDown)));
 		nextFrameBtn.setPosition(left + 5 + 32 + 5 + 32 + 5, 5);
 		nextFrameBtn.addListener(new InputListener() {
@@ -184,8 +165,12 @@ public class UserInterface {
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if (appState.workingAnimation.paused) {
+					appState.workingAnimation.animTimer += WorkingAnimation.framerate;
+				}
 			}
 		});
+
 		prevFrameBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(prevFrameUp)), new TextureRegionDrawable(new TextureRegion(prevFrameDown)));
 		prevFrameBtn.setPosition(left + 5, 5);
 		prevFrameBtn.addListener(new InputListener() {
@@ -196,6 +181,9 @@ public class UserInterface {
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				if (appState.workingAnimation.paused) {
+					appState.workingAnimation.animTimer -= WorkingAnimation.framerate;
+				}
 			}
 		});
 		// --------------------------------------------------------------------
@@ -223,8 +211,7 @@ public class UserInterface {
 		stage.addActor(clearAnimBtn);
 		stage.addActor(quitBtn);
 		stage.addActor(statusWindow);
-		stage.addActor(playBtn);
-		stage.addActor(pauseBtn);
+		stage.addActor(playPauseBtn);
 		stage.addActor(nextFrameBtn);
 		stage.addActor(prevFrameBtn);
 		// --------------------------------------------------------------------
