@@ -1,12 +1,12 @@
 package lando.systems.watcher;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
@@ -22,16 +22,35 @@ public class UserInterface {
 	TextButton clearAnimBtn;
 	TextButton quitBtn;
 
+	ImageButton playBtn;
+	ImageButton pauseBtn;
+	ImageButton nextFrameBtn;
+	ImageButton prevFrameBtn;
+
 	Window statusWindow;
 	Label watchDirLbl;
 	Label animDurationLbl;
 	Label frameDurationLbl;
 
+	Texture playUp, playDown;
+	Texture pauseUp, pauseDown;
+	Texture nextFrameUp, nextFrameDown;
+	Texture prevFrameUp, prevFrameDown;
 
 	public UserInterface(AppState state) {
 		appState = state;
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		stage = new Stage(new ScreenViewport());
+
+		playUp = new Texture(Gdx.files.internal("play-up.png"));
+		playDown = new Texture(Gdx.files.internal("play-down.png"));
+		pauseUp = new Texture(Gdx.files.internal("pause-up.png"));
+		pauseDown = new Texture(Gdx.files.internal("pause-down.png"));
+		nextFrameUp = new Texture(Gdx.files.internal("next-up.png"));
+		nextFrameDown = new Texture(Gdx.files.internal("next-down.png"));
+		prevFrameUp = new Texture(Gdx.files.internal("prev-up.png"));
+		prevFrameDown = new Texture(Gdx.files.internal("prev-down.png"));
+
 		initializeWidgets();
 	}
 
@@ -57,6 +76,14 @@ public class UserInterface {
 	}
 
 	public void dispose() {
+		prevFrameDown.dispose();
+		prevFrameUp.dispose();
+		nextFrameDown.dispose();
+		nextFrameUp.dispose();
+		pauseDown.dispose();
+		pauseUp.dispose();
+		playDown.dispose();
+		playUp.dispose();
 		stage.dispose();
 	}
 
@@ -108,6 +135,69 @@ public class UserInterface {
 		});
 		quitBtn.setPosition(stage.getWidth() - 72 - 5, 5);
 		quitBtn.setSize(72, 32);
+
+		float left = 5 + 72 + 5 + 72;
+		playBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(playUp)), new TextureRegionDrawable(new TextureRegion(playDown)));
+		playBtn.setPosition(left + 5 + 32 + 5, 5);
+		playBtn.setColor(1,1,1,0);
+		playBtn.setDisabled(true);
+		playBtn.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				playBtn.setColor(1,1,1,0);
+				pauseBtn.setColor(1,1,1,1);
+
+				playBtn.setDisabled(true);
+				pauseBtn.setDisabled(false);
+			}
+		});
+		pauseBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(pauseUp)), new TextureRegionDrawable(new TextureRegion(pauseDown)));
+		pauseBtn.setPosition(left + 5 + 32 + 5, 5);
+		pauseBtn.setDisabled(false);
+		pauseBtn.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				playBtn.setColor(1,1,1,1);
+				pauseBtn.setColor(1,1,1,0);
+
+				playBtn.setDisabled(false);
+				pauseBtn.setDisabled(true);
+			}
+		});
+		nextFrameBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextFrameUp)), new TextureRegionDrawable(new TextureRegion(nextFrameDown)));
+		nextFrameBtn.setPosition(left + 5 + 32 + 5 + 32 + 5, 5);
+		nextFrameBtn.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+			}
+		});
+		prevFrameBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(prevFrameUp)), new TextureRegionDrawable(new TextureRegion(prevFrameDown)));
+		prevFrameBtn.setPosition(left + 5, 5);
+		prevFrameBtn.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+			}
+		});
 		// --------------------------------------------------------------------
 
 		// Status window
@@ -133,6 +223,10 @@ public class UserInterface {
 		stage.addActor(clearAnimBtn);
 		stage.addActor(quitBtn);
 		stage.addActor(statusWindow);
+		stage.addActor(playBtn);
+		stage.addActor(pauseBtn);
+		stage.addActor(nextFrameBtn);
+		stage.addActor(prevFrameBtn);
 		// --------------------------------------------------------------------
 	}
 

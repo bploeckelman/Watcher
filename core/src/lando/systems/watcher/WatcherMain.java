@@ -71,10 +71,10 @@ public class WatcherMain extends ApplicationAdapter {
 		batch.setProjectionMatrix(appState.cameras.hudCamera.combined);
 		batch.begin();
 
-		AppState.font.setColor(Color.WHITE);
-		AppState.font.draw(batch, "[mouse scroll] zoom animation in/out", 2 * (margin_x + 72), 45 + line_height);
-		AppState.font.draw(batch, "[shift+scroll] zoom faster  [ctrl+scroll] zoom thumbnails", 2 * (margin_x + 72), 25 + line_height);
-		AppState.font.draw(batch, "[left/right] [up/down] change frame duration", 2 * (margin_x + 72), 5 + line_height);
+//		AppState.font.setColor(Color.WHITE);
+//		AppState.font.draw(batch, "[mouse scroll] zoom animation in/out", 2 * (margin_x + 72), 45 + line_height);
+//		AppState.font.draw(batch, "[shift+scroll] zoom faster  [ctrl+scroll] zoom thumbnails", 2 * (margin_x + 72), 25 + line_height);
+//		AppState.font.draw(batch, "[left/right] [up/down] change frame duration", 2 * (margin_x + 72), 5 + line_height);
 
 		appState.workingAnimation.renderUI(batch);
 
