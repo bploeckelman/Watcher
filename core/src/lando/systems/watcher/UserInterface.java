@@ -22,7 +22,6 @@ public class UserInterface {
 	TextButton clearAnimBtn;
 	TextButton quitBtn;
 
-	ImageButton playBtn;
 	ImageButton playPauseBtn;
 	ImageButton nextFrameBtn;
 	ImageButton prevFrameBtn;
@@ -36,6 +35,12 @@ public class UserInterface {
 	Texture pauseUp, pauseDown;
 	Texture nextFrameUp, nextFrameDown;
 	Texture prevFrameUp, prevFrameDown;
+
+	final float margin_x = 5;
+	final float margin_y = 5;
+	final float button_width = 72;
+	final float button_height = 32;
+
 
 	public UserInterface(AppState state) {
 		appState = state;
@@ -70,7 +75,7 @@ public class UserInterface {
 
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
-		quitBtn.setPosition(stage.getWidth() - 72 - 5, 5);
+		quitBtn.setPosition(stage.getWidth() - button_width - margin_x, margin_y);
 		statusWindow.setSize(stage.getWidth(), statusWindow.getHeight());
 		statusWindow.setPosition(0, stage.getHeight());
 	}
@@ -92,6 +97,8 @@ public class UserInterface {
 		// Buttons
 		// --------------------------------------------------------------------
 		loadAnimBtn = new TextButton("Load", skin);
+		loadAnimBtn.setPosition(margin_x, margin_y);
+		loadAnimBtn.setSize(button_width, button_height);
 		loadAnimBtn.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -103,10 +110,10 @@ public class UserInterface {
 				appState.updateWatchDirectory();
 			}
 		});
-		loadAnimBtn.setPosition(5, 5);
-		loadAnimBtn.setSize(72, 32);
 
 		clearAnimBtn = new TextButton("Clear", skin);
+		clearAnimBtn.setPosition(margin_x + button_width + margin_x, margin_y);
+		clearAnimBtn.setSize(button_width, button_height);
 		clearAnimBtn.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -118,10 +125,10 @@ public class UserInterface {
 				appState.clearAnimation();
 			}
 		});
-		clearAnimBtn.setPosition(5 + 72 + 5, 5);
-		clearAnimBtn.setSize(72, 32);
 
 		quitBtn = new TextButton("Quit", skin);
+		quitBtn.setPosition(stage.getWidth() - button_width - margin_x, margin_y);
+		quitBtn.setSize(button_width, button_height);
 		quitBtn.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -133,15 +140,13 @@ public class UserInterface {
 				Gdx.app.exit();
 			}
 		});
-		quitBtn.setPosition(stage.getWidth() - 72 - 5, 5);
-		quitBtn.setSize(72, 32);
 
-		float left = 5 + 72 + 5 + 72;
+		float left = 2 * (margin_x + button_width);
 		playPauseBtn = new ImageButton(
 				new TextureRegionDrawable(new TextureRegion(pauseUp)),
 				new TextureRegionDrawable(new TextureRegion(pauseDown)),
 				new TextureRegionDrawable(new TextureRegion(playDown)));
-		playPauseBtn.setPosition(left + 5 + 32 + 5, 5);
+		playPauseBtn.setPosition(left + margin_x + button_height + margin_x, margin_y);
 		playPauseBtn.setChecked(true);
 		playPauseBtn.addListener(new InputListener() {
 			@Override
@@ -155,8 +160,10 @@ public class UserInterface {
 			}
 		});
 
-		nextFrameBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextFrameUp)), new TextureRegionDrawable(new TextureRegion(nextFrameDown)));
-		nextFrameBtn.setPosition(left + 5 + 32 + 5 + 32 + 5, 5);
+		nextFrameBtn = new ImageButton(
+				new TextureRegionDrawable(new TextureRegion(nextFrameUp)),
+				new TextureRegionDrawable(new TextureRegion(nextFrameDown)));
+		nextFrameBtn.setPosition(left + margin_x + button_height + margin_x + button_height + margin_x, margin_y);
 		nextFrameBtn.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -171,8 +178,10 @@ public class UserInterface {
 			}
 		});
 
-		prevFrameBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(prevFrameUp)), new TextureRegionDrawable(new TextureRegion(prevFrameDown)));
-		prevFrameBtn.setPosition(left + 5, 5);
+		prevFrameBtn = new ImageButton(
+				new TextureRegionDrawable(new TextureRegion(prevFrameUp)),
+				new TextureRegionDrawable(new TextureRegion(prevFrameDown)));
+		prevFrameBtn.setPosition(left + margin_x, margin_y);
 		prevFrameBtn.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -201,7 +210,7 @@ public class UserInterface {
 		statusWindow.pack();
 		statusWindow.setPosition(0, stage.getHeight());
 		statusWindow.setTitleAlignment(Align.left);
-		statusWindow.padLeft(5);
+		statusWindow.padLeft(margin_x);
 		statusWindow.left();
 		// --------------------------------------------------------------------
 
