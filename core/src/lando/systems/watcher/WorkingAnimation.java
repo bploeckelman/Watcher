@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -95,7 +96,7 @@ public class WorkingAnimation {
 	 *
 	 * @param batch the SpriteBatch to draw with
 	 */
-	public void renderUI(SpriteBatch batch) {
+	public void renderUI(Batch batch) {
 		final float initial_pos_x = 5;
 		final float initial_pos_y = 35;
 		final float keyframe_offset_height = 0;

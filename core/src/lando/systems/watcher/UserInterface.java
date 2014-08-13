@@ -2,6 +2,7 @@ package lando.systems.watcher;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -71,6 +72,9 @@ public class UserInterface {
 
 	public void render() {
 		stage.draw();
+		stage.getBatch().begin();
+		appState.workingAnimation.renderUI(stage.getBatch());
+		stage.getBatch().end();
 	}
 
 	public void resize(int width, int height) {

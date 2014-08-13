@@ -41,7 +41,7 @@ public class WatcherMain extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		sceneRender();
-		uiRender();
+		appState.ui.render();
 	}
 
 	private void sceneRender() {
@@ -59,29 +59,4 @@ public class WatcherMain extends ApplicationAdapter {
 		batch.draw(appState.workingAnimation.keyframe, whw - thw, whh - thh);
 		batch.end();
 	}
-
-	private void uiRender() {
-		final float margin_x = 5;
-		final float line_height = AppState.font.getLineHeight();
-
-		int vw = (int) appState.cameras.hudCamera.viewportWidth;
-		int vh = (int) appState.cameras.hudCamera.viewportHeight;
-		Gdx.gl20.glViewport(0, 0, vw, vh);
-
-		batch.setProjectionMatrix(appState.cameras.hudCamera.combined);
-		batch.begin();
-
-//		AppState.font.setColor(Color.WHITE);
-//		AppState.font.draw(batch, "[mouse scroll] zoom animation in/out", 2 * (margin_x + 72), 45 + line_height);
-//		AppState.font.draw(batch, "[shift+scroll] zoom faster  [ctrl+scroll] zoom thumbnails", 2 * (margin_x + 72), 25 + line_height);
-//		AppState.font.draw(batch, "[left/right] [up/down] change frame duration", 2 * (margin_x + 72), 5 + line_height);
-
-		appState.workingAnimation.renderUI(batch);
-
-		batch.end();
-
-
-		appState.ui.render();
-	}
-
 }
