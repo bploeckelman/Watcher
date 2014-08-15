@@ -37,7 +37,8 @@ public class WatcherMain extends ApplicationAdapter {
 	public void render () {
 		appState.update(Gdx.graphics.getDeltaTime());
 
-		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+		Color bg = appState.ui.background;
+		Gdx.gl.glClearColor(bg.r, bg.g, bg.b, bg.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		sceneRender();
