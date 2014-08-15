@@ -80,9 +80,7 @@ public class WorkingAnimation {
 
 		// Update animation timer
 		if (!paused) {
-			if ((animTimer += delta) > animation.getAnimationDuration()) {
-				animTimer = 0f;
-			}
+			animTimer += delta;
 		}
 
 		// Get current keyframe (assuming a valid animation)
@@ -169,6 +167,13 @@ public class WorkingAnimation {
 		textures.clear();
 		animation = new Animation(1f, new TextureRegion(default_texture));
 		animation.setPlayMode(PlayMode.LOOP);
+	}
+
+	/**
+	 * Change the current play mode
+	 */
+	public void changePlayMode(PlayMode newPlayMode) {
+		animation.setPlayMode(newPlayMode);
 	}
 
 	/**

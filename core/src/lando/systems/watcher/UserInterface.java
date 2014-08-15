@@ -3,7 +3,7 @@ package lando.systems.watcher;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -39,6 +39,7 @@ public class UserInterface {
 	Slider bgRedSlider;
 	Slider bgGreenSlider;
 	Slider bgBlueSlider;
+	SelectBox<String> animPlayModeSelect;
 
 	Texture playUp, playDown;
 	Texture pauseUp, pauseDown;
@@ -46,6 +47,7 @@ public class UserInterface {
 	Texture prevFrameUp, prevFrameDown;
 
 	Color background;
+	PlayMode animPlayMode;
 
 	final float margin_x = 5;
 	final float margin_y = 5;
@@ -69,6 +71,7 @@ public class UserInterface {
 		prevFrameDown = new Texture(Gdx.files.internal("prev-down.png"));
 
 		background = new Color(0.1f, 0.1f, 0.1f, 1);
+		animPlayMode = PlayMode.LOOP;
 
 		initializeWidgets();
 	}
@@ -296,6 +299,21 @@ public class UserInterface {
 			}
 		});
 
+		Label animModeSelectLabel = new Label("Animation Mode", skin);
+		animPlayModeSelect = new SelectBox<String>(skin);
+		animPlayModeSelect.setItems("Normal", "PingPong", "Reverse");
+		animPlayModeSelect.setSelected("Normal");
+		animPlayModeSelect.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				final String selectedMode = animPlayModeSelect.getSelected();
+				if      (selectedMode.equals("Normal"))   animPlayMode = PlayMode.LOOP;
+				else if (selectedMode.equals("PingPong")) animPlayMode = PlayMode.LOOP_PINGPONG;
+				else if (selectedMode.equals("Reverse"))  animPlayMode = PlayMode.LOOP_REVERSED;
+				appState.workingAnimation.changePlayMode(animPlayMode);
+			}
+		});
+
 		settingsWindow = new Window("Settings", skin);
 		settingsWindow.row(); settingsWindow.add(backgroundColorLabel).width(settings_window_width).padLeft(margin_x);
 		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorR)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
@@ -304,6 +322,9 @@ public class UserInterface {
 		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgGreenSlider) .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorB)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgBlueSlider)  .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row(); settingsWindow.add(new Label(" ", skin)).expandX();
+		settingsWindow.row(); settingsWindow.add(animModeSelectLabel).width(settings_window_width).padLeft(margin_x);
+		settingsWindow.row().padRight(margin_x); settingsWindow.add(animPlayModeSelect).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.pack();
 		settingsWindow.setSize(settings_window_width, stage.getHeight() - quitBtn.getHeight() - statusWindow.getHeight() - 2 * margin_y);
 		settingsWindow.setPosition(stage.getWidth(), quitBtn.getHeight() + 2 * margin_y);
