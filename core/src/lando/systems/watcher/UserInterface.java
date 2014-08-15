@@ -3,6 +3,7 @@ package lando.systems.watcher;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -120,8 +121,12 @@ public class UserInterface {
 
 
 	private void initializeWidgets() {
-		// Buttons
-		// --------------------------------------------------------------------
+		initializeButtons();
+		initializeStatusWindow();
+		initializeSettingsWindow();
+	}
+
+	private void initializeButtons() {
 		loadAnimBtn = new TextButton("Load", skin);
 		loadAnimBtn.setPosition(margin_x, margin_y);
 		loadAnimBtn.setSize(button_width, button_height);
@@ -248,16 +253,27 @@ public class UserInterface {
 		});
 		// --------------------------------------------------------------------
 
-		// Status window
-		// --------------------------------------------------------------------
+		stage.addActor(loadAnimBtn);
+		stage.addActor(clearAnimBtn);
+		stage.addActor(playPauseBtn);
+		stage.addActor(nextFrameBtn);
+		stage.addActor(prevFrameBtn);
+		stage.addActor(settingsBtn);
+		stage.addActor(quitBtn);
+	}
+
+	private void initializeStatusWindow() {
 		watchDirLbl = new Label(WorkingDirectory.default_watch_dir, skin);
 		animDurationLbl = new Label("Animation duration (sec) : 0.0000", skin);
 		frameDurationLbl = new Label("Frame duration     (sec) : 0.0000", skin);
 
 		statusWindow = new Window("Status", skin);
-		statusWindow.row(); statusWindow.add(watchDirLbl)     .width(stage.getWidth()).align(Align.left);
-		statusWindow.row(); statusWindow.add(animDurationLbl) .width(stage.getWidth()).align(Align.left);
-		statusWindow.row(); statusWindow.add(frameDurationLbl).width(stage.getWidth()).align(Align.left);
+		statusWindow.row();
+		statusWindow.add(watchDirLbl)     .width(stage.getWidth()).align(Align.left);
+		statusWindow.row();
+		statusWindow.add(animDurationLbl) .width(stage.getWidth()).align(Align.left);
+		statusWindow.row();
+		statusWindow.add(frameDurationLbl).width(stage.getWidth()).align(Align.left);
 		statusWindow.pack();
 		statusWindow.setPosition(0, stage.getHeight());
 		statusWindow.setTitleAlignment(Align.left);
@@ -265,8 +281,10 @@ public class UserInterface {
 		statusWindow.left();
 		// --------------------------------------------------------------------
 
-		// Settings window
-		// --------------------------------------------------------------------
+		stage.addActor(statusWindow);
+	}
+
+	private void initializeSettingsWindow() {
 		Label backgroundColorLabel = new Label("Background Color", skin);
 		Label bgColorR = new Label("Red", skin);
 		Label bgColorG = new Label("Green", skin);
@@ -315,33 +333,33 @@ public class UserInterface {
 		});
 
 		settingsWindow = new Window("Settings", skin);
-		settingsWindow.row(); settingsWindow.add(backgroundColorLabel).width(settings_window_width).padLeft(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorR)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgRedSlider)   .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorG)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgGreenSlider) .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorB)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgBlueSlider)  .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row(); settingsWindow.add(new Label(" ", skin)).expandX();
-		settingsWindow.row(); settingsWindow.add(animModeSelectLabel).width(settings_window_width).padLeft(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(animPlayModeSelect).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row();
+		settingsWindow.add(backgroundColorLabel).width(settings_window_width).padLeft(margin_x);
+		settingsWindow.row().padRight(margin_x);
+		settingsWindow.add(bgColorR)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x);
+		settingsWindow.add(bgRedSlider)   .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x);
+		settingsWindow.add(bgColorG)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x);
+		settingsWindow.add(bgGreenSlider) .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x);
+		settingsWindow.add(bgColorB)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x);
+		settingsWindow.add(bgBlueSlider)  .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row();
+		settingsWindow.add(new Label(" ", skin)).expandX();
+		settingsWindow.row();
+		settingsWindow.add(animModeSelectLabel).width(settings_window_width).padLeft(margin_x);
+		settingsWindow.row().padRight(margin_x);
+		settingsWindow.add(animPlayModeSelect).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.pack();
 		settingsWindow.setSize(settings_window_width, stage.getHeight() - quitBtn.getHeight() - statusWindow.getHeight() - 2 * margin_y);
 		settingsWindow.setPosition(stage.getWidth(), quitBtn.getHeight() + 2 * margin_y);
 		settingsWindow.top();
+		// --------------------------------------------------------------------
 
-		// Add to stage
-		// --------------------------------------------------------------------
-		stage.addActor(statusWindow);
-		stage.addActor(loadAnimBtn);
-		stage.addActor(clearAnimBtn);
-		stage.addActor(playPauseBtn);
-		stage.addActor(nextFrameBtn);
-		stage.addActor(prevFrameBtn);
-		stage.addActor(settingsBtn);
-		stage.addActor(quitBtn);
 		stage.addActor(settingsWindow);
-		// --------------------------------------------------------------------
 	}
 
 }
