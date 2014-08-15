@@ -298,16 +298,15 @@ public class UserInterface {
 
 		settingsWindow = new Window("Settings", skin);
 		settingsWindow.row(); settingsWindow.add(backgroundColorLabel).width(settings_window_width).padLeft(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorR)      .width(settings_window_width - 2*margin_x).align(Align.left).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgRedSlider)   .width(settings_window_width - 2*margin_x).align(Align.left).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorG)      .width(settings_window_width - 2*margin_x).align(Align.left).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgGreenSlider) .width(settings_window_width - 2*margin_x).align(Align.left).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorB)      .width(settings_window_width - 2*margin_x).align(Align.left).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgBlueSlider)  .width(settings_window_width - 2*margin_x).align(Align.left).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorR)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgRedSlider)   .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorG)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgGreenSlider) .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgColorB)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row().padRight(margin_x); settingsWindow.add(bgBlueSlider)  .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.pack();
 		settingsWindow.setSize(settings_window_width, stage.getHeight() - quitBtn.getHeight() - statusWindow.getHeight() - 2 * margin_y);
 		settingsWindow.setPosition(stage.getWidth(), quitBtn.getHeight() + 2 * margin_y);
-		settingsWindow.padLeft(margin_x);
 		settingsWindow.top();
 
 		// Add to stage
