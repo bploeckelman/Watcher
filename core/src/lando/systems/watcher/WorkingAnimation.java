@@ -38,7 +38,7 @@ public class WorkingAnimation {
 	static Map<String, Texture> textures;
 	static Animation animation;
 	static float framerate;
-	float animTimer;
+	static float animTimer;
 
 	Texture default_texture;
 	TextureRegion keyframe;
@@ -246,6 +246,8 @@ public class WorkingAnimation {
 			regions.add(new TextureRegion(textures.get(key)));
 		}
 		animation = new Animation(framerate, regions);
+		animation.setPlayMode(PlayMode.LOOP);
+		animTimer = 0;
 	}
 
 	/**
