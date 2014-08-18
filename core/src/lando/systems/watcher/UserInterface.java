@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -41,11 +42,15 @@ public class UserInterface {
 	Slider bgGreenSlider;
 	Slider bgBlueSlider;
 	SelectBox<String> animPlayModeSelect;
+	ImageButton fasterBtn;
+	ImageButton slowerBtn;
 
 	Texture playUp, playDown;
 	Texture pauseUp, pauseDown;
 	Texture nextFrameUp, nextFrameDown;
 	Texture prevFrameUp, prevFrameDown;
+	Texture plusUp, plusDown;
+	Texture minusUp, minusDown;
 
 	Color background;
 	PlayMode animPlayMode;
@@ -59,17 +64,21 @@ public class UserInterface {
 
 	public UserInterface(AppState state) {
 		appState = state;
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin  = new Skin(Gdx.files.internal("uiskin.json"));
 		stage = new Stage(new ScreenViewport());
 
-		playUp = new Texture(Gdx.files.internal("play-up.png"));
-		playDown = new Texture(Gdx.files.internal("play-down.png"));
-		pauseUp = new Texture(Gdx.files.internal("pause-up.png"));
-		pauseDown = new Texture(Gdx.files.internal("pause-down.png"));
-		nextFrameUp = new Texture(Gdx.files.internal("next-up.png"));
+		playUp        = new Texture(Gdx.files.internal("play-up.png"));
+		playDown      = new Texture(Gdx.files.internal("play-down.png"));
+		pauseUp       = new Texture(Gdx.files.internal("pause-up.png"));
+		pauseDown     = new Texture(Gdx.files.internal("pause-down.png"));
+		nextFrameUp   = new Texture(Gdx.files.internal("next-up.png"));
 		nextFrameDown = new Texture(Gdx.files.internal("next-down.png"));
-		prevFrameUp = new Texture(Gdx.files.internal("prev-up.png"));
+		prevFrameUp   = new Texture(Gdx.files.internal("prev-up.png"));
 		prevFrameDown = new Texture(Gdx.files.internal("prev-down.png"));
+		plusUp        = new Texture(Gdx.files.internal("plus-up.png"));
+		plusDown      = new Texture(Gdx.files.internal("plus-down.png"));
+		minusUp       = new Texture(Gdx.files.internal("minus-up.png"));
+		minusDown     = new Texture(Gdx.files.internal("minus-down.png"));
 
 		background = new Color(0.1f, 0.1f, 0.1f, 1);
 		animPlayMode = PlayMode.LOOP;
@@ -80,11 +89,23 @@ public class UserInterface {
 
 	public void update(float delta) {
 		stage.act(delta);
+
 		watchDirLbl.setText(WorkingDirectory.watchPath.getFileName().toAbsolutePath().toString());
+
 		animDurationLbl.setText("Animation duration (sec) : "
 				+ String.format("%02.4f", WorkingAnimation.animation.getAnimationDuration()));
 		frameDurationLbl.setText("Frame duration     (sec) : "
 				+ String.format("%02.4f", WorkingAnimation.framerate));
+
+		if (fasterBtn.isPressed()) {
+			WorkingAnimation.framerate -= WorkingAnimation.frame_step_big;
+			if (WorkingAnimation.framerate <= WorkingAnimation.frame_rate_min)
+				WorkingAnimation.framerate  = WorkingAnimation.frame_rate_min;
+		}
+		if (slowerBtn.isPressed()) {
+			WorkingAnimation.framerate += WorkingAnimation.frame_step_big;
+			// Clamp the framerate to a maximum value?
+		}
 	}
 
 	public void render() {
@@ -108,6 +129,10 @@ public class UserInterface {
 	}
 
 	public void dispose() {
+		minusDown.dispose();
+		minusUp.dispose();
+		plusDown.dispose();
+		plusUp.dispose();
 		prevFrameDown.dispose();
 		prevFrameUp.dispose();
 		nextFrameDown.dispose();
@@ -146,7 +171,6 @@ public class UserInterface {
 		clearAnimBtn.setPosition(margin_x + button_width + margin_x, margin_y);
 		clearAnimBtn.setSize(button_width, button_height);
 		clearAnimBtn.addListener(new InputListener() {
-			boolean visible = true;
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 				return true;
@@ -332,27 +356,66 @@ public class UserInterface {
 			}
 		});
 
+		Label animSpeedLabel = new Label("Animation Speed", skin);
+		fasterBtn = new ImageButton(
+				new TextureRegionDrawable(new TextureRegion(plusUp)),
+				new TextureRegionDrawable(new TextureRegion(plusDown)));
+		fasterBtn.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				// Polling handled in update()
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				WorkingAnimation.refresh();
+			}
+		});
+		slowerBtn = new ImageButton(
+				new TextureRegionDrawable(new TextureRegion(minusUp)),
+				new TextureRegionDrawable(new TextureRegion(minusDown)));
+		slowerBtn.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				// Polling handled in update()
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				WorkingAnimation.refresh();
+			}
+		});
+
 		settingsWindow = new Window("Settings", skin);
 		settingsWindow.row();
-		settingsWindow.add(backgroundColorLabel).width(settings_window_width).padLeft(margin_x);
+		settingsWindow.add(backgroundColorLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
 		settingsWindow.row().padRight(margin_x);
-		settingsWindow.add(bgColorR)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.add(bgColorR)      .colspan(2).width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row().padRight(margin_x);
-		settingsWindow.add(bgRedSlider)   .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.add(bgRedSlider)   .colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row().padRight(margin_x);
-		settingsWindow.add(bgColorG)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.add(bgColorG)      .colspan(2).width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row().padRight(margin_x);
-		settingsWindow.add(bgGreenSlider) .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.add(bgGreenSlider) .colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row().padRight(margin_x);
-		settingsWindow.add(bgColorB)      .width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
+		settingsWindow.add(bgColorB)      .colspan(2).width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row().padRight(margin_x);
-		settingsWindow.add(bgBlueSlider)  .width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.add(bgBlueSlider)  .colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row();
-		settingsWindow.add(new Label(" ", skin)).expandX();
+		settingsWindow.add(new Label(" ", skin)).colspan(2).expandX();
 		settingsWindow.row();
-		settingsWindow.add(animModeSelectLabel).width(settings_window_width).padLeft(margin_x);
+		settingsWindow.add(animModeSelectLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
 		settingsWindow.row().padRight(margin_x);
-		settingsWindow.add(animPlayModeSelect).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.add(animPlayModeSelect).colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row();
+		settingsWindow.add(new Label(" ", skin)).colspan(2).expandX();
+		settingsWindow.row();
+		settingsWindow.add(animSpeedLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
+		settingsWindow.row();
+		settingsWindow.add(slowerBtn).align(Align.center).colspan(1).padLeft(margin_x);
+		settingsWindow.add(fasterBtn).align(Align.center).colspan(1).padLeft(margin_x);
 		settingsWindow.pack();
 		settingsWindow.setSize(settings_window_width, stage.getHeight() - quitBtn.getHeight() - statusWindow.getHeight() - 2 * margin_y);
 		settingsWindow.setPosition(stage.getWidth(), quitBtn.getHeight() + 2 * margin_y);
