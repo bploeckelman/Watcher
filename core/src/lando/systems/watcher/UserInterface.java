@@ -44,6 +44,7 @@ public class UserInterface {
 	SelectBox<String> animPlayModeSelect;
 	ImageButton fasterBtn;
 	ImageButton slowerBtn;
+	Slider animZoomSlider;
 
 	Texture playUp, playDown;
 	Texture pauseUp, pauseDown;
@@ -388,6 +389,16 @@ public class UserInterface {
 			}
 		});
 
+		Label animZoomLabel = new Label("Animation Zoom", skin);
+		animZoomSlider = new Slider(InputHandler.minimum_zoom, 1.5f, InputHandler.scroll_modifier, false, skin);
+		animZoomSlider.setValue(1);
+		animZoomSlider.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				appState.cameras.sceneCamera.zoom = animZoomSlider.getValue();
+			}
+		});
+
 		settingsWindow = new Window("Settings", skin);
 		settingsWindow.row();
 		settingsWindow.add(backgroundColorLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
@@ -403,19 +414,23 @@ public class UserInterface {
 		settingsWindow.add(bgColorB)      .colspan(2).width(settings_window_width - 2*margin_x).align(Align.left)  .padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row().padRight(margin_x);
 		settingsWindow.add(bgBlueSlider)  .colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row();
-		settingsWindow.add(new Label(" ", skin)).colspan(2).expandX();
+//		settingsWindow.row();
+//		settingsWindow.add(new Label(" ", skin)).colspan(2).expandX();
 		settingsWindow.row();
 		settingsWindow.add(animModeSelectLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
 		settingsWindow.row().padRight(margin_x);
 		settingsWindow.add(animPlayModeSelect).colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
-		settingsWindow.row();
-		settingsWindow.add(new Label(" ", skin)).colspan(2).expandX();
+//		settingsWindow.row();
+//		settingsWindow.add(new Label(" ", skin)).colspan(2).expandX();
 		settingsWindow.row();
 		settingsWindow.add(animSpeedLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
 		settingsWindow.row();
 		settingsWindow.add(slowerBtn).align(Align.center).colspan(1).padLeft(margin_x);
 		settingsWindow.add(fasterBtn).align(Align.center).colspan(1).padLeft(margin_x);
+		settingsWindow.row();
+		settingsWindow.add(animZoomLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
+		settingsWindow.row();
+		settingsWindow.add(animZoomSlider).colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.pack();
 		settingsWindow.setSize(settings_window_width, stage.getHeight() - quitBtn.getHeight() - statusWindow.getHeight() - 2 * margin_y);
 		settingsWindow.setPosition(stage.getWidth(), quitBtn.getHeight() + 2 * margin_y);
