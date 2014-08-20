@@ -45,6 +45,7 @@ public class UserInterface {
 	ImageButton fasterBtn;
 	ImageButton slowerBtn;
 	Slider animZoomSlider;
+	Slider thumbnailZoomSlider;
 
 	Texture playUp, playDown;
 	Texture pauseUp, pauseDown;
@@ -389,13 +390,25 @@ public class UserInterface {
 			}
 		});
 
+		final float maximum_zoom = 1.5f;
 		Label animZoomLabel = new Label("Animation Zoom", skin);
-		animZoomSlider = new Slider(InputHandler.minimum_zoom, 1.5f, InputHandler.scroll_modifier, false, skin);
+		animZoomSlider = new Slider(InputHandler.minimum_zoom, maximum_zoom, InputHandler.scroll_modifier, false, skin);
 		animZoomSlider.setValue(1);
 		animZoomSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				appState.cameras.sceneCamera.zoom = animZoomSlider.getValue();
+				appState.cameras.sceneCamera.zoom = maximum_zoom - animZoomSlider.getValue() + InputHandler.minimum_zoom;
+			}
+		});
+
+		final Label thumbnailZoomLabel = new Label("Thumbnail Zoom", skin);
+		thumbnailZoomSlider = new Slider(InputHandler.minimum_thumbnail, 128, InputHandler.scroll_modifier, false, skin);
+		thumbnailZoomSlider.setValue(32);
+		thumbnailZoomSlider.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				appState.workingAnimation.thumbnail_width  = (int) thumbnailZoomSlider.getValue();
+				appState.workingAnimation.thumbnail_height = (int) thumbnailZoomSlider.getValue();
 			}
 		});
 
@@ -431,6 +444,10 @@ public class UserInterface {
 		settingsWindow.add(animZoomLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
 		settingsWindow.row();
 		settingsWindow.add(animZoomSlider).colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
+		settingsWindow.row();
+		settingsWindow.add(thumbnailZoomLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
+		settingsWindow.row();
+		settingsWindow.add(thumbnailZoomSlider).colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.pack();
 		settingsWindow.setSize(settings_window_width, stage.getHeight() - quitBtn.getHeight() - statusWindow.getHeight() - 2 * margin_y);
 		settingsWindow.setPosition(stage.getWidth(), quitBtn.getHeight() + 2 * margin_y);
