@@ -42,8 +42,7 @@ public class UserInterface {
 	Slider bgGreenSlider;
 	Slider bgBlueSlider;
 	SelectBox<String> animPlayModeSelect;
-	ImageButton fasterBtn;
-	ImageButton slowerBtn;
+	Slider animSpeedSlider;
 	Slider animZoomSlider;
 	Slider thumbnailZoomSlider;
 
@@ -51,8 +50,6 @@ public class UserInterface {
 	Texture pauseUp, pauseDown;
 	Texture nextFrameUp, nextFrameDown;
 	Texture prevFrameUp, prevFrameDown;
-	Texture plusUp, plusDown;
-	Texture minusUp, minusDown;
 
 	Color background;
 	PlayMode animPlayMode;
@@ -77,10 +74,6 @@ public class UserInterface {
 		nextFrameDown = new Texture(Gdx.files.internal("next-down.png"));
 		prevFrameUp   = new Texture(Gdx.files.internal("prev-up.png"));
 		prevFrameDown = new Texture(Gdx.files.internal("prev-down.png"));
-		plusUp        = new Texture(Gdx.files.internal("plus-up.png"));
-		plusDown      = new Texture(Gdx.files.internal("plus-down.png"));
-		minusUp       = new Texture(Gdx.files.internal("minus-up.png"));
-		minusDown     = new Texture(Gdx.files.internal("minus-down.png"));
 
 		background = new Color(0.1f, 0.1f, 0.1f, 1);
 		animPlayMode = PlayMode.LOOP;
@@ -98,16 +91,6 @@ public class UserInterface {
 				+ String.format("%02.4f", WorkingAnimation.animation.getAnimationDuration()));
 		frameDurationLbl.setText("Frame duration     (sec) : "
 				+ String.format("%02.4f", WorkingAnimation.framerate));
-
-		if (fasterBtn.isPressed()) {
-			WorkingAnimation.framerate -= WorkingAnimation.frame_step_big;
-			if (WorkingAnimation.framerate <= WorkingAnimation.frame_rate_min)
-				WorkingAnimation.framerate  = WorkingAnimation.frame_rate_min;
-		}
-		if (slowerBtn.isPressed()) {
-			WorkingAnimation.framerate += WorkingAnimation.frame_step_big;
-			// Clamp the framerate to a maximum value?
-		}
 	}
 
 	public void render() {
@@ -131,10 +114,6 @@ public class UserInterface {
 	}
 
 	public void dispose() {
-		minusDown.dispose();
-		minusUp.dispose();
-		plusDown.dispose();
-		plusUp.dispose();
 		prevFrameDown.dispose();
 		prevFrameUp.dispose();
 		nextFrameDown.dispose();
@@ -255,7 +234,7 @@ public class UserInterface {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				if (appState.workingAnimation.paused) {
-					appState.workingAnimation.animTimer += WorkingAnimation.framerate;
+					WorkingAnimation.animTimer += WorkingAnimation.framerate;
 				}
 			}
 		});
@@ -273,7 +252,7 @@ public class UserInterface {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				if (appState.workingAnimation.paused) {
-					appState.workingAnimation.animTimer -= WorkingAnimation.framerate;
+					WorkingAnimation.animTimer -= WorkingAnimation.framerate;
 				}
 			}
 		});
@@ -358,34 +337,17 @@ public class UserInterface {
 			}
 		});
 
+		final float framerate_default = WorkingAnimation.default_frame_rate;
+		final float framerate_step = WorkingAnimation.frame_step_small;
+		final float framerate_min = WorkingAnimation.frame_rate_min;
+		final float framerate_max = 1f;
 		Label animSpeedLabel = new Label("Animation Speed", skin);
-		fasterBtn = new ImageButton(
-				new TextureRegionDrawable(new TextureRegion(plusUp)),
-				new TextureRegionDrawable(new TextureRegion(plusDown)));
-		fasterBtn.addListener(new InputListener() {
+		animSpeedSlider = new Slider(framerate_min, framerate_max, framerate_step, false, skin);
+		animSpeedSlider.setValue(framerate_max - framerate_default + framerate_min);
+		animSpeedSlider.addListener(new ChangeListener() {
 			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				// Polling handled in update()
-				return true;
-			}
-
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				WorkingAnimation.refresh();
-			}
-		});
-		slowerBtn = new ImageButton(
-				new TextureRegionDrawable(new TextureRegion(minusUp)),
-				new TextureRegionDrawable(new TextureRegion(minusDown)));
-		slowerBtn.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				// Polling handled in update()
-				return true;
-			}
-
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+			public void changed(ChangeEvent event, Actor actor) {
+				WorkingAnimation.framerate = framerate_max - animSpeedSlider.getValue() + framerate_min;
 				WorkingAnimation.refresh();
 			}
 		});
@@ -438,8 +400,7 @@ public class UserInterface {
 		settingsWindow.row();
 		settingsWindow.add(animSpeedLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
 		settingsWindow.row();
-		settingsWindow.add(slowerBtn).align(Align.center).colspan(1).padLeft(margin_x);
-		settingsWindow.add(fasterBtn).align(Align.center).colspan(1).padLeft(margin_x);
+		settingsWindow.add(animSpeedSlider).colspan(2).width(settings_window_width - 2*margin_x).align(Align.center).padLeft(margin_x).padRight(margin_x);
 		settingsWindow.row();
 		settingsWindow.add(animZoomLabel).colspan(2).width(settings_window_width).padLeft(margin_x);
 		settingsWindow.row();
